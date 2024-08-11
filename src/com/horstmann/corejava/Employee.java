@@ -4,9 +4,8 @@ import java.util.Objects;
 import java.time.LocalDate;
 import java.util.Random;
 
-public class Employee {
+public class Employee extends Person {
     private static int nextId = 1;
-    private final String name;
     private double salary;
     private final LocalDate hireDay;
     private final int id;
@@ -24,9 +23,7 @@ public class Employee {
     }
 
     public Employee(String name, double salary, int year, int month, int day) {
-        Objects.requireNonNull(name, "The name cannot be null");
-
-        this.name = name;
+        super(name);
         this.salary = salary;
         this.hireDay = LocalDate.of(year, month, day);
     }
@@ -44,8 +41,8 @@ public class Employee {
         return nextId; // static method return static field
     }
 
-    public String getName() {
-        return this.name;
+    public String getDescription() {
+        return String.format("an employee with a salary of $%.2f", this.getSalary());
     }
 
     public double getSalary() {
@@ -64,7 +61,24 @@ public class Employee {
         this.salary *= (1.0 + byPercent / 100);
     }
 
-    public boolean equals(Employee other) {
-        return this.name.equals(other.name);
+    public boolean equals(Object other) {
+        if (this == other) return true;
+
+        if (other == null) return false;
+
+        if (getClass() != other.getClass()) return false;
+
+        Employee otherEmployee = (Employee) other;
+        return this.getName().equals(otherEmployee.getName()) &&
+                this.getSalary() == otherEmployee.getSalary() &&
+                this.getHireDay() == otherEmployee.getHireDay();
+//        return Objects.equals(this.getName(), otherEmployee.getName());
+    }
+
+    public String toString() {
+        return getClass().getName()
+                + "[id=" + this.id + ",name=" + this.getName()
+                + ",salary=" + this.salary + ",hireDay=" + this.hireDay
+                + "]";
     }
 }
